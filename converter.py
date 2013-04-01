@@ -4,8 +4,8 @@
 from config import *
 from path import path
 import time
-import subprocess
 from subprocess import check_output
+from helpers import set_token_info, get_token_info
 
 def process_url(requestpath):
     '''Processes a url into a mp3 and updates .status files.
@@ -16,18 +16,17 @@ def process_url(requestpath):
 
     print 'Converting {}'.format(url) # Usefull to debug
 
-    statusfile = PROCESSING_DIR / (token + '.status')
-    statusfile.write_text('Wip')
+    set_token_info(token, status='wip')
 
     try:
         audiopath = PROCESSING_DIR / (token + '.audio')
         title = convert_file(url, audiopath)
         print 'Done.' # Usefull to debug
-        statusfile.write_text(title)
+        set_token_info(token, status='done', title=title)
 
     except:
         print 'Error during convert.'
-        statusfile.write_text('Error')
+        set_token_info(token, status='error')
 
     finally:
         requestpath.unlink() # Delete .request file
