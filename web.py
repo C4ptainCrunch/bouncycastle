@@ -5,9 +5,6 @@ from cherrypy.lib.static import serve_file
 
 import json
 
-import datetime
-import time
-
 from path import path
 from urlparse import urlparse
 from hashlib import md5
