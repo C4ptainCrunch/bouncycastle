@@ -27,7 +27,7 @@ def push():
     local("git push")
 
 def restart_services():
-    run('sudo supervisorctl restart' + PROCESSES.join(' '))
+    run('sudo supervisorctl restart ' + ' '.join(PROCESSES))
 
 def deploy():
     pull()
