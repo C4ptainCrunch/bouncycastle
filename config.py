@@ -1,8 +1,21 @@
 from path import path
-PROCESSING_DIR = path('/tmp/bouncy/')
-if not PROCESSING_DIR.exists():
-    raise Exception('PROCESSING_DIR does not exsist')
-ALLOWED_DOMAINS = ('www.youtube.com','youtu.be','www.dailymotion.com')
 
+# Place where bouncy should place processing files and mp3 files
+PROCESSING_DIR = path('/tmp/bouncy/')
+
+# Root of evil
+ROOT_DIR = path('/Users/nikita/Code/bouncycastle/')
+
+# Allow conversion from following domains
+ALLOWED_DOMAINS = ('www.youtube.com','youtu.be','www.dailymotion.com','soundcloud.com')
+
+# Command used to convert the url into an mp3
 CONVERT_CMD = 'youtube-dl -x --audio-format=mp3 --audio-quality=256K -o "{path}" {url}'
+# Command used to get the title of the song/video
 TITLE_CMD = 'youtube-dl -e {}'
+
+
+# Do not continue if PROCESSING_DIR does not exsist
+if not PROCESSING_DIR.exists():
+    raise Exception('PROCESSING_DIR does not exsist\n'
+        + 'please create ' + PROCESSING_DIR)

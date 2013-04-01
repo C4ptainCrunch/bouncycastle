@@ -22,23 +22,12 @@ class Zoidberg(object):
         '''Index page. Just shows a form and shit'''
         return self.get_html('base.tpl',filecontent='index.tpl')
 
+
     @cherrypy.expose
     def wait(self,token):
-        ''''''
+        '''Shows a waiting page containing the token in a hidden field'''
         return self.get_html('base.tpl',filecontent='wait.tpl',content=token)
 
-    def get_html(self,template,filecontent=None,content=None):
-        if not filecontent is None:
-            if not content is None :
-                fill = open(filecontent).read().format(content)
-            else:
-                fill = open(filecontent).read()
-        elif not content is None:
-            fill = content
-        else:
-            fill = ''
-
-        return open(template).read().format(fill)
 
     @cherrypy.expose
     def add(self,url):
@@ -52,30 +41,9 @@ class Zoidberg(object):
         token = md5(url).hexdigest()
         requestfile = PROCESSING_DIR/(token+'.request')
         requestfile.write_text(url)
+
         raise cherrypy.HTTPRedirect("/wait?token={}".format(token), 301)
 
-
-    def token_status(self,token):
-        '''Checks the status of the given video url associated with token'''
-
-        statuspath = PROCESSING_DIR/(token+'.status')
-        if not statuspath.exists():
-            requestpath = PROCESSING_DIR/(token+'.request')
-            if not requestpath.exists():
-                return 'Unknown'
-            else :
-                return 'Queued'
-        elif statuspath.text().strip() in ('Wip','Error'):
-            return statuspath.text().strip()
-        else:
-            return 'Done'
-
-    def isToken(self,token):
-        if not len(token) == 32:
-            return False
-        if '.' in token or '/' in token:
-            return False
-        return True
 
     @cherrypy.expose
     def status(self,token):
@@ -87,6 +55,7 @@ class Zoidberg(object):
                 return status
         else:
             raise cherrypy.HTTPError(401,'Invalid token')
+
 
     @cherrypy.expose
     def download(self,token):
@@ -103,5 +72,49 @@ class Zoidberg(object):
         serve = serve_file(filepath, "application/x-download", "attachment",title+'.mp3')
         return serve
 
+    # ------------------ #
+    # ---- Helpers ----- #
+    # ------------------ #
 
-cherrypy.quickstart(root=Zoidberg(),config="/Users/nikita/Code/bouncycastle/cherry.conf")
+    def get_html(self, template, filecontent=None, content=None):
+        '''Really dumb "templating" system. Give a base template in template
+        an inner template in filecontent and some real content in content.
+        get_html() will put content in filecontent then filecontent in template.
+        If filecontent is None, get_html() will put content in template directly'''
+
+        if filecontent is None:
+            return open(template).read().format(content)
+        else:
+            fill = open(filecontent).read().format(content)
+            return open(template).read().format(fill)
+
+
+    def token_status(self,token):
+        '''Checks the status of the video url associated with the given token
+        Will retrun : Unknown, Queued, Error, Wip or Done'''
+
+        statuspath = PROCESSING_DIR/(token+'.status')
+        if not statuspath.exists():
+            requestpath = PROCESSING_DIR/(token+'.request')
+            if not requestpath.exists():
+                return 'Unknown'
+            else :
+                return 'Queued'
+        elif statuspath.text().strip() in ('Wip','Error'):
+            return statuspath.text().strip()
+        else:
+            return 'Done'
+
+
+    def isToken(self,token):
+        '''Cheks if token is a valid video token (aka a md5 string).'''
+
+        if not len(token) == 32:
+            return False
+        if ('.' in token) or ('/' in token):
+            return False
+        # TODO : make a real check.
+        return True
+
+# Just run this fuck'in webserver !
+cherrypy.quickstart(root=Zoidberg(),config=path(ROOT_DIR)/'cherry.conf')
