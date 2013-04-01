@@ -18,6 +18,13 @@ TITLE_CMD = 'youtube-dl -e {}'
 CHERRY_PORT = 8080
 CHERRY_STATICFILES = ROOT_DIR / 'static'
 CHERRY_TEMPLATESDIR = ROOT_DIR
+
+# Easy deployment should be easy
+try:
+    from production import *
+except ImportError:
+    pass
+
 # Do not continue if PROCESSING_DIR does not exsist
 if not PROCESSING_DIR.exists():
     raise Exception('PROCESSING_DIR does not exsist\n'
