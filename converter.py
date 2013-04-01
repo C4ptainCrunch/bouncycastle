@@ -16,12 +16,12 @@ def process_url(requestpath):
 
     print 'Converting {}'.format(url) # Usefull to debug
 
-    statusfile = PROCESSING_DIR/(token+'.status')
+    statusfile = PROCESSING_DIR / (token + '.status')
     statusfile.write_text('Wip')
 
     try:
-        audiopath = PROCESSING_DIR/(token+'.audio')
-        title = convert_file(url,audiopath)
+        audiopath = PROCESSING_DIR / (token + '.audio')
+        title = convert_file(url, audiopath)
         print 'Done.' # Usefull to debug
         statusfile.write_text(title)
 
@@ -33,10 +33,10 @@ def process_url(requestpath):
         requestpath.unlink() # Delete .request file
 
 
-def convert_file(url,path):
+def convert_file(url, path):
     '''Converts a url to a mp3 into `path` and returns the song title'''
 
-    check_output(CONVERT_CMD.format(path=path,url=url), shell=True)
+    check_output(CONVERT_CMD.format(path=path, url=url), shell=True)
 
     # Return the title of the song
     return check_output(TITLE_CMD.format(url), shell=True).strip()
