@@ -17,13 +17,13 @@ class Zoidberg(object):
     @cherrypy.expose
     def index(self):
         '''Index page. Just shows a form and shit'''
-        return self.get_html('base.tpl',filecontent='index.tpl')
+        return get_html('base.tpl',filecontent='index.tpl')
 
 
     @cherrypy.expose
     def wait(self,token):
         '''Shows a waiting page containing the token in a hidden field'''
-        return self.get_html('base.tpl',filecontent='wait.tpl',content=token)
+        return get_html('base.tpl',filecontent='wait.tpl',content=token)
 
 
     @cherrypy.expose
@@ -44,8 +44,8 @@ class Zoidberg(object):
 
     @cherrypy.expose
     def status(self,token):
-        if self.isToken(token):
-            status = self.token_status(token)
+        if isToken(token):
+            status = token_status(token)
             if status == 'Unknown':
                 raise cherrypy.HTTPError(404,'No corresponding token')
             else:
@@ -56,7 +56,7 @@ class Zoidberg(object):
 
     @cherrypy.expose
     def download(self,token):
-        if not self.isToken(token):
+        if not isToken(token):
             raise cherrypy.HTTPError(401,'Invalid token')
 
         filepath = PROCESSING_DIR/(token+'.mp3')
@@ -69,49 +69,51 @@ class Zoidberg(object):
         serve = serve_file(filepath, "application/x-download", "attachment",title+'.mp3')
         return serve
 
-    # ------------------ #
-    # ---- Helpers ----- #
-    # ------------------ #
-
-    def get_html(self, template, filecontent=None, content=None):
-        '''Really dumb "templating" system. Give a base template in template
-        an inner template in filecontent and some real content in content.
-        get_html() will put content in filecontent then filecontent in template.
-        If filecontent is None, get_html() will put content in template directly'''
-
-        if filecontent is None:
-            return open(CHERRY_TEMPLATESDIR / template).read().format(content)
-        else:
-            fill = open(CHERRY_TEMPLATESDIR / filecontent).read().format(content)
-            return open(CHERRY_TEMPLATESDIR / template).read().format(fill)
 
 
-    def token_status(self,token):
-        '''Checks the status of the video url associated with the given token
-        Will retrun : Unknown, Queued, Error, Wip or Done'''
+# ------------------ #
+# ---- Helpers ----- #
+# ------------------ #
 
-        statuspath = PROCESSING_DIR/(token+'.status')
-        if not statuspath.exists():
-            requestpath = PROCESSING_DIR/(token+'.request')
-            if not requestpath.exists():
-                return 'Unknown'
-            else :
-                return 'Queued'
-        elif statuspath.text().strip() in ('Wip','Error'):
-            return statuspath.text().strip()
-        else:
-            return 'Done'
+def get_html(template, filecontent=None, content=None):
+    '''Really dumb "templating" system. Give a base template in template
+    an inner template in filecontent and some real content in content.
+    get_html() will put content in filecontent then filecontent in template.
+    If filecontent is None, get_html() will put content in template directly'''
+
+    if filecontent is None:
+        return open(CHERRY_TEMPLATESDIR / template).read().format(content)
+    else:
+        fill = open(CHERRY_TEMPLATESDIR / filecontent).read().format(content)
+        return open(CHERRY_TEMPLATESDIR / template).read().format(fill)
 
 
-    def isToken(self,token):
-        '''Cheks if token is a valid video token (aka a md5 string).'''
+def token_status(token):
+    '''Checks the status of the video url associated with the given token
+    Will retrun : Unknown, Queued, Error, Wip or Done'''
 
-        if not len(token) == 32:
-            return False
-        if ('.' in token) or ('/' in token):
-            return False
-        # TODO : make a real check.
-        return True
+    statuspath = PROCESSING_DIR/(token+'.status')
+    if not statuspath.exists():
+        requestpath = PROCESSING_DIR/(token+'.request')
+        if not requestpath.exists():
+            return 'Unknown'
+        else :
+            return 'Queued'
+    elif statuspath.text().strip() in ('Wip','Error'):
+        return statuspath.text().strip()
+    else:
+        return 'Done'
+
+
+def isToken(token):
+    '''Cheks if token is a valid video token (aka a md5 string).'''
+
+    if not len(token) == 32:
+        return False
+    if ('.' in token) or ('/' in token):
+        return False
+    # TODO : make a real check.
+    return True
 
 
 # Just run this fuck'in webserver !
