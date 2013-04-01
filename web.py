@@ -28,6 +28,7 @@ class Zoidberg(object):
 
     @cherrypy.expose
     @servejson
+    @post_only
     def add(self, url=''):
         '''Adds url to the convert queue if it is a valid url.
         Otherwise returns as 401'''

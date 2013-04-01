@@ -39,11 +39,14 @@ def get_token_info(token):
     return meta
 
 def init_token_info():
+    '''Creates a new (for now) empty token info'''
     meta = {
     }
     return meta
 
 def set_token_info(token,**xargs):
+    '''Changes/sets all meta values (passed as named params) of the given token
+    and writes to disk'''
     meta = get_token_info(token)
     if not meta:
         meta = init_token_info()
@@ -56,7 +59,20 @@ def set_token_info(token,**xargs):
 
 
 def servejson(func):
+    '''Decorator : sets Content-Type to application/json' and converts
+    the output to json with json.dumps()'''
     def decorate(*args, **kwargs):
         cherrypy.response.headers['Content-Type'] = 'application/json'
         return json.dumps(func(*args, **kwargs))
     return decorate
+
+def post_only(func,error_str='Method not allowed. Plz send POST with the <token> param'):
+    '''Decorator : allows only POST (case insensitive) http method on the funtion.
+    If cherrypy.request.method != POST sends error_str'''
+
+    def send_error(*args, **kwargs):
+        return error_str
+
+    if not cherrypy.request.method.upper() == 'POST':
+        return send_error
+    return func
