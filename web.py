@@ -57,7 +57,7 @@ class Zoidberg(object):
         if not meta:
             return {'error' : 'Token unknown'}
 
-        return {'status' : meta['status']}
+        return meta
 
 
     @cherrypy.expose
