@@ -25,7 +25,9 @@
 
 <header class="branding">
 <div class="logo">
+<a href="/" title="I want more jumps !">
 <img style="float:left" src='http://blog.gobouncy.co.uk/wp-content/uploads/2012/06/bouncy-castles.jpg' height="100"><h1>Bouncy castle, the easy youtube to mp3 website!</h1>
+</a>
 </div>
 </header><!-- HEADER -->
 
