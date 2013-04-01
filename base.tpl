@@ -41,7 +41,7 @@
 {}
 </div>
 <div class="half last">
-<h2 class="giga">Why use Sympl?</h2>
+<!-- <h2 class="giga">Why use Sympl?</h2>
 <p>Simply because it's simple. And amazing. Here are a few features:</p>
 <ol>
 <li>A good vertical rhythym defined.
@@ -54,7 +54,7 @@
 <li>Javascript starts with <a href="http://html5shiv.googlecode.com/">HTML5Shiv</a>.
 </ol>
 <p>Sympl is lightweight, fast, ready to go, and always usable. You can use it in each and every project, and you'll see that you use <em>all</em> of the things bundled with Sympl.</p>
-  </div>
+  --></div>
 </section>
 
 <footer class="colophon">
