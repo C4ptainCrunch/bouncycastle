@@ -22,13 +22,13 @@ class Zoidberg(object):
 
 
     @cherrypy.expose
-    def wait(self, token):
+    def wait(self, token=''):
         '''Shows a waiting page containing the token in a hidden field'''
         return get_html('base.tpl', filecontent='wait.tpl', content=token)
 
     @cherrypy.expose
     @servejson
-    def add(self, url):
+    def add(self, url=''):
         '''Adds url to the convert queue if it is a valid url.
         Otherwise returns as 401'''
 
@@ -38,18 +38,18 @@ class Zoidberg(object):
 
         token = md5(url).hexdigest()
         if get_token_info(token):
-            return {'token' : token}
+            raise cherrypy.HTTPRedirect("/status?token={}".format(token), 301)
 
         requestfile = PROCESSING_DIR / (token + '.request')
         requestfile.write_text(url)
 
         set_token_info(token, url=url, status='queue')
-        return {'token' : token}
+        raise cherrypy.HTTPRedirect("/status?token={}".format(token), 301)
 
 
     @cherrypy.expose
     @servejson
-    def status(self, token):
+    def status(self, token=''):
         if not isToken(token):
             return {'error' : 'No token'}
 
@@ -61,7 +61,7 @@ class Zoidberg(object):
 
 
     @cherrypy.expose
-    def download(self, token):
+    def download(self, token=''):
         if not isToken(token):
             raise cherrypy.HTTPError(401, 'Invalid token')
 
