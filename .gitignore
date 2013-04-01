@@ -1,3 +1,4 @@
 *.pyc
 ve/
 production.py
+fab_config.py
