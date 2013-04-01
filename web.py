@@ -80,10 +80,10 @@ class Zoidberg(object):
         If filecontent is None, get_html() will put content in template directly'''
 
         if filecontent is None:
-            return open(template).read().format(content)
+            return open(CHERRY_TEMPLATESDIR / template).read().format(content)
         else:
-            fill = open(filecontent).read().format(content)
-            return open(template).read().format(fill)
+            fill = open(CHERRY_TEMPLATESDIR / filecontent).read().format(content)
+            return open(CHERRY_TEMPLATESDIR / template).read().format(fill)
 
 
     def token_status(self,token):
@@ -113,5 +113,20 @@ class Zoidberg(object):
         # TODO : make a real check.
         return True
 
+
 # Just run this fuck'in webserver !
-cherrypy.quickstart(root=Zoidberg(),config=path(ROOT_DIR)/'cherry.conf')
+
+CHERRY_CONFIG = {
+    'global':
+    {
+        'server.socket_host' : '127.0.0.1',
+        'server.socket_port' : CHERRY_PORT,
+        'server.logToScreen' : True,
+    },
+    '/static':
+    {
+        'tools.staticdir.on' : True,
+        'tools.staticdir.dir' : CHERRY_STATICFILES,
+    }
+}
+cherrypy.quickstart(root=Zoidberg(),config=CHERRY_CONFIG)

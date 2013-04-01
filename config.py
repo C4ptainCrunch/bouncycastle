@@ -14,7 +14,10 @@ CONVERT_CMD = 'youtube-dl -x --audio-format=mp3 --audio-quality=256K -o "{path}"
 # Command used to get the title of the song/video
 TITLE_CMD = 'youtube-dl -e {}'
 
-
+# Cherrypy configuration otpions
+CHERRY_PORT = 8080
+CHERRY_STATICFILES = ROOT_DIR / 'static'
+CHERRY_TEMPLATESDIR = ROOT_DIR
 # Do not continue if PROCESSING_DIR does not exsist
 if not PROCESSING_DIR.exists():
     raise Exception('PROCESSING_DIR does not exsist\n'
