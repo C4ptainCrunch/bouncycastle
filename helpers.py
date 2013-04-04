@@ -2,6 +2,7 @@ from path import path
 from config import *
 import json
 import cherrypy
+from functools import wraps
 
 def get_html(template, filecontent=None, content=None):
     '''Really dumb "templating" system. Give a base template in template
@@ -44,35 +45,39 @@ def init_token_info():
     }
     return meta
 
-def set_token_info(token,**xargs):
+def set_token_info(token,**kwargs):
     '''Changes/sets all meta values (passed as named params) of the given token
     and writes to disk'''
+
     meta = get_token_info(token)
     if not meta:
         meta = init_token_info()
 
-    for key in xargs:
-        meta[key] = xargs[key]
+    for key in kwargs:
+        meta[key] = kwargs[key]
 
     metapath = PROCESSING_DIR / (token + '.meta')
     metapath.write_text(json.dumps(meta))
 
 
-def servejson(func):
-    '''Decorator : sets Content-Type to application/json' and converts
-    the output to json with json.dumps()'''
-    def decorate(*args, **kwargs):
-        cherrypy.response.headers['Content-Type'] = 'application/json'
-        return json.dumps(func(*args, **kwargs))
-    return decorate
+def jsonify(func):
+    '''JSON decorator'''
 
-def post_only(func,error_str='Method not allowed. Plz send POST with the <token> param'):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        value = func(*args, **kwargs)
+        cherrypy.response.headers["Content-Type"] = "application/json"
+        return json.dumps(value)
+
+    return wrapper
+
+def post_only(func,error_str='Method not allowed. Plz send POST with the <url> param'):
     '''Decorator : allows only POST (case insensitive) http method on the funtion.
     If cherrypy.request.method != POST sends error_str'''
 
-    def send_error(*args, **kwargs):
-        return error_str
-
-    if not cherrypy.request.method.upper() == 'POST':
-        return send_error
-    return func
+    def decorate(*args, **kwargs):
+        if not cherrypy.request.method.upper() == 'POST':
+            return error_str
+        else:
+            return func(*args, **kwargs)
+    return decorate

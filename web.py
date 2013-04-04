@@ -27,7 +27,7 @@ class Zoidberg(object):
         return get_html('base.tpl', filecontent='wait.tpl', content=token)
 
     @cherrypy.expose
-    @servejson
+    @jsonify
     @post_only
     def add(self, url=''):
         '''Adds url to the convert queue if it is a valid url.
@@ -49,7 +49,7 @@ class Zoidberg(object):
 
 
     @cherrypy.expose
-    @servejson
+    @jsonify
     def status(self, token=''):
         if not isToken(token):
             return {'error' : 'No token'}
