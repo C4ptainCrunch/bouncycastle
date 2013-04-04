@@ -36,7 +36,7 @@
 <article class="primary">
 
 
-<section class="row">
+<section class="row" id="content">
 <!-- <div class="half"> -->
 {}
 <!-- </div>
@@ -64,5 +64,7 @@
 </footer><!-- FOOTER -->
 
 </div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="static/check.js"></script>
 </body>
 </html>

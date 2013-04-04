@@ -58,26 +58,31 @@ class Zoidberg(object):
         if not meta:
             return {'error' : 'Token unknown'}
 
+        meta.update({'token' : token})
+
         return meta
 
 
     @cherrypy.expose
     def download(self, token=''):
         if not isToken(token):
-            raise cherrypy.HTTPError(401, 'Invalid token')
+            return {'error' : 'Invalid token'}
 
         filepath = PROCESSING_DIR / (token + '.mp3')
         if not filepath.exists():
-            raise cherrypy.HTTPError(404, 'Hey ! I dont know this token !')
+            return {'error' : 'Hey ! I dont know this token !'}
 
         meta = get_token_info(token)
         if not meta or not meta['title'] or not meta['status'] == 'done':
-            raise cherrypy.HTTPError(500, 'Error... Please retry or contact admin')
+            return {'error' : 'Error... Please retry or contact admin'}
 
         title = meta['title']
         serve = serve_file(filepath, "application/x-download", "attachment", title + '.mp3')
         return serve
 
+    @cherrypy.expose
+    def index_tpl(self):
+        return (CHERRY_TEMPLATESDIR / 'index.tpl').text()
 
 # Serve on localhost and be kind, serve static files to
 CHERRY_CONFIG = {
