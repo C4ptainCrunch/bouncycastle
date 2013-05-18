@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Bouncy Castle by C4ptainCrunch</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Bouncy Castle</h1>
+        <p class="header">Simple youtube to mp3 converter based on Cherrypy and Youtube-dl</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/C4ptainCrunch/bouncycastle/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/C4ptainCrunch/bouncycastle/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/C4ptainCrunch/bouncycastle">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/C4ptainCrunch">C4ptainCrunch</a></p>
+
+
+      </header>
+      <section>
+        <h1>Bouncy Castle</h1>
+
+<p>Bouncy castle is a self-hosted converter to convert Youtube videos (or Soundcloud musics) to mp3.
+It's like <a href="http://www.youtube-mp3.org/">youtube-mp3.org</a> but on <strong>your</strong> machine (and also, it does not block some videos like <a href="http://www.youtube-mp3.org/">youtube-mp3</a>).</p>
+
+<p>It is a simple web front-end to the CLI <code>youyube-dl</code> python converter.</p>
+
+<h2>Roll your own !</h2>
+
+<p>Bouncy Castle is super easy, try it at home !
+It has only few dependencies : <code>python2.7+</code> and <code>youyube-dl</code> (witch uses <code>ffmpeg</code>)</p>
+
+<h3>Install</h3>
+
+<pre><code>git clone git://github.com/C4ptainCrunch/bouncycastle.git
+virtualenv --distribute --no-site-packages ve 
+source ve/bin/activate
+pip install -r requirements.txt
+</code></pre>
+
+<p>Check <code>config.py</code> for an example configuration file and put the values you want to overwrite in <code>production.py</code></p>
+
+<h3>Run</h3>
+
+<p>You should run <code>web.py</code> for the web interface and <code>convert.py</code> to convert the videos. (I use supervisord to run both)</p>
+
+<h2>License</h2>
+
+<p>Bouncy Castle is AGPLv3+ licensed and heavily uses <a href="http://rg3.github.io/youtube-dl/">youtube-dl</a> which is in the Public Domain.  Bouncy also uses <a href="http://www.cherrypy.org/%20a%20lot%20(BSD%20licence">CherryPy</a>.</p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
