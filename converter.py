@@ -19,7 +19,7 @@ def process_url(requestpath):
     set_token_info(token, status='wip')
 
     try:
-        audiopath = PROCESSING_DIR / (token + '.audio')
+        audiopath = PROCESSING_DIR / (token + '.%(ext)s')
         title = convert_file(url, audiopath)
         print 'Done.' # Usefull to debug
         set_token_info(token, status='done', title=title)
