@@ -99,5 +99,12 @@ CHERRY_CONFIG = {
     }
 }
 
-# Just run this fuck'in webserver !
-cherrypy.quickstart(root=Zoidberg(), config=CHERRY_CONFIG)
+def application(environ, start_response):
+  cherrypy.tree.mount(Zoidberg(), '/', None)
+  return cherrypy.tree(environ, start_response)
+
+
+if __name__ == '__main__':
+    # Just run this fuck'in webserver !
+    cherrypy.quickstart(root=Zoidberg(), config=CHERRY_CONFIG)
+
