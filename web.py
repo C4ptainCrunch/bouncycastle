@@ -77,7 +77,7 @@ class Zoidberg(object):
             return {'error' : 'Error... Please retry or contact admin'}
 
         cherrypy.response.headers.update({
-            'X-Accel-Redirect'    : '/accel-download/{0}'.format(token + '.mp3'),
+            'X-Accel-Redirect'    : '/acceldownload/{0}'.format(token + '.mp3'),
             'Content-Disposition' : 'attachment; filename="{0}.mp3"'.format(meta['title'].replace('"', "'")),
             'Content-Type'        : 'application/octet-stream'
         })
