@@ -76,9 +76,11 @@ class Zoidberg(object):
         if not meta or not meta['title'] or not meta['status'] == 'done':
             return {'error' : 'Error... Please retry or contact admin'}
 
-        title = meta['title']
-        serve = serve_file(filepath, "application/x-download", "attachment", title + '.mp3')
-        return serve
+        cherrypy.response.headers.update({
+            'X-Accel-Redirect'    : '/accel-download/{0}'.format(token + '.mp3'),
+            'Content-Disposition' : 'attachment; filename={0}.mp3'.format(meta['title']),
+            'Content-Type'        : 'application/octet-stream'
+        })
 
     @cherrypy.expose
     def index_tpl(self):
