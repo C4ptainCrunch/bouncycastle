@@ -78,7 +78,7 @@ class Zoidberg(object):
 
         cherrypy.response.headers.update({
             'X-Accel-Redirect'    : '/accel-download/{0}'.format(token + '.mp3'),
-            'Content-Disposition' : 'attachment; filename={0}.mp3'.format(meta['title']),
+            'Content-Disposition' : 'attachment; filename="{0}".mp3'.format(meta['title']),
             'Content-Type'        : 'application/octet-stream'
         })
 
